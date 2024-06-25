@@ -1,0 +1,25 @@
+{
+  "name": "awesome-ws",
+  "version": "1.0.0",
+  "description": "ws is awesome",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KangmoonSeo/awesome-ws.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KangmoonSeo/awesome-ws/issues"
+  },
+  "homepage": "https://github.com/KangmoonSeo/awesome-ws#readme",
+  "dependencies": {
+    "uuid": "^10.0.0",
+    "ws": "^8.17.1"
+  }
+}
