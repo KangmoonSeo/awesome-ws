@@ -2,13 +2,41 @@
 <html>
   <head>
     <title>WebSocket Client</title>
+    <style>
+      @keyframes glow {
+        0% {
+          color: red;
+          text-shadow: 0 0 10px red;
+        }
+        25% {
+          color: yellow;
+          text-shadow: 0 0 10px yellow;
+        }
+        50% {
+          color: green;
+          text-shadow: 0 0 10px green;
+        }
+        75% {
+          color: blue;
+          text-shadow: 0 0 10px blue;
+        }
+        100% {
+          color: purple;
+          text-shadow: 0 0 10px purple;
+        }
+      }
+      .glowing-text {
+        animation: glow 2s linear infinite;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
     <h1>WebSocket Client</h1>
     <button id="connectButton">Connect</button>
     <button id="sendButton" disabled>Send Message</button>
     <button id="disconnectButton" disabled>Disconnect</button>
-    <pre id="messages"></pre>
+    <div id="messages"></div>
 
     <script>
       let socket;
@@ -18,30 +46,37 @@
         socket = new WebSocket("ws://localhost:8080");
 
         socket.addEventListener("open", () => {
-          messages.textContent += "Connected to the server\n";
+          messages.innerHTML += "Connected to the server<br>";
           document.getElementById("sendButton").disabled = false;
           document.getElementById("disconnectButton").disabled = false;
         });
 
         socket.addEventListener("message", (event) => {
-          messages.textContent += `Message from server: ${event.data}\n`;
+          const joke = JSON.parse(event.data);
+          const jokeHtml = `
+          <p>
+            ${joke.question}
+            <span class="glowing-text">${joke.answer}</span>
+          </p>
+        `;
+          messages.innerHTML += jokeHtml;
         });
 
         socket.addEventListener("close", () => {
-          messages.textContent += "Disconnected from the server\n";
+          messages.innerHTML += "Disconnected from the server<br>";
           document.getElementById("sendButton").disabled = true;
           document.getElementById("disconnectButton").disabled = true;
         });
 
         socket.addEventListener("error", (error) => {
-          messages.textContent += `WebSocket error: ${error.message}\n`;
+          messages.innerHTML += `WebSocket error: ${error.message}<br>`;
         });
       });
 
       document.getElementById("sendButton").addEventListener("click", () => {
         const message = "Hello Server!";
         socket.send(message);
-        messages.textContent += `Sent to server: ${message}\n`;
+        messages.innerHTML += `Sent to server: ${message}<br>`;
       });
 
       document

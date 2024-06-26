@@ -26,9 +26,10 @@ async function loadJokes() {
     process.exit(1);
   }
 }
-
 function getRandomJoke() {
-  return jokes[Math.floor(Math.random() * jokes.length)];
+  const joke = jokes[Math.floor(Math.random() * jokes.length)];
+  const [question, answer] = joke.split("?");
+  return JSON.stringify({ question: question + "?", answer: answer });
 }
 
 function broadcastJoke() {
