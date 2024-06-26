@@ -2,19 +2,17 @@
 
 Joke generator with WebSocket
 
-# client
+![alt text](images/client-template.gif)
 
-## templates
+## client
 
-![alt text](images/client-template.png)
-
-## how to run
+### how to run
 
 - Open `client/index.html` in your browser
 
-# server
+## server
 
-## how to run
+### how to run
 
 1. Navigate to the server directory.
 
@@ -34,16 +32,16 @@ npm install
 npm run start
 ```
 
-# Project Description
+## Project Description
 
 awesome-ws is a joke generator that uses WebSocket for real-time communication between the client and server. The client runs in the browser, while the server is built with Node.js. You can send and receive jokes through the WebSocket connection.
 
-## Tech Stack
+### Tech Stack
 
 - Client: HTML, CSS, JavaScript
 - Server: Node.js, WebSocket
 
-## How to Contribute
+### How to Contribute
 
 1. Fork this repository.
 2. Create a new branch. (git checkout -b feature-branch)
@@ -52,6 +50,6 @@ awesome-ws is a joke generator that uses WebSocket for real-time communication b
 5. Push your branch. (git push origin feature-branch)
 6. Create a pull request.
 
-## License
+### License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
