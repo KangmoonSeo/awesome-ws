@@ -26,7 +26,7 @@
         }
       }
       .glowing-text {
-        animation: glow 2s linear infinite;
+        animation: glow 2.718s linear infinite;
         font-weight: bold;
       }
     </style>
@@ -42,41 +42,60 @@
       let socket;
       const messages = document.getElementById("messages");
 
+      function addMessage(content) {
+        const messageElement = document.createElement("div");
+        messageElement.innerHTML = `<p>${content}</p>`;
+        messages.insertBefore(messageElement, messages.firstChild);
+      }
+
+      function addQAMessage(question, answer) {
+        const messageElement = document.createElement("div");
+        messageElement.innerHTML = `
+          <p>
+            ${question}
+            <span class="glowing-text">${answer}</span>
+          </p>
+        `;
+        messages.insertBefore(messageElement, messages.firstChild);
+      }
+
       document.getElementById("connectButton").addEventListener("click", () => {
         socket = new WebSocket("ws://localhost:8080");
 
         socket.addEventListener("open", () => {
-          messages.innerHTML += "Connected to the server<br>";
+          addMessage("Connected to the server");
           document.getElementById("sendButton").disabled = false;
           document.getElementById("disconnectButton").disabled = false;
         });
 
         socket.addEventListener("message", (event) => {
-          const joke = JSON.parse(event.data);
-          const jokeHtml = `
-          <p>
-            ${joke.question}
-            <span class="glowing-text">${joke.answer}</span>
-          </p>
-        `;
-          messages.innerHTML += jokeHtml;
+          try {
+            const parsedMessage = JSON.parse(event.data);
+            if (parsedMessage?.question) {
+              addQAMessage(parsedMessage.question, parsedMessage.answer);
+            } else {
+              addMessage(event.data);
+            }
+          } catch (error) {
+            addMessage(event.data);
+          }
         });
 
         socket.addEventListener("close", () => {
-          messages.innerHTML += "Disconnected from the server<br>";
+          addMessage("Disconnected from the server");
           document.getElementById("sendButton").disabled = true;
           document.getElementById("disconnectButton").disabled = true;
         });
 
         socket.addEventListener("error", (error) => {
-          messages.innerHTML += `WebSocket error: ${error.message}<br>`;
+          addMessage(`WebSocket error: ${error.message}`);
         });
       });
 
       document.getElementById("sendButton").addEventListener("click", () => {
         const message = "Hello Server!";
         socket.send(message);
-        messages.innerHTML += `Sent to server: ${message}<br>`;
+        addMessage(`Sent to server: ${message}`);
       });
 
       document
