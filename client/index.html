@@ -3,6 +3,82 @@
   <head>
     <title>WebSocket Client</title>
     <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      #controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      #connectButton {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      #sendButton {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      #disconnectButton {
+        background-color: #f44336;
+        color: white;
+      }
+
+      button:disabled {
+        background-color: #bdbdbd;
+        cursor: not-allowed;
+      }
+
+      #messages {
+        width: 80%;
+        max-width: 600px;
+        height: 400px;
+        overflow-y: auto;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #e0e0e0;
+      }
+
+      .message.qa {
+        background-color: #cce7ff;
+      }
+
+      .glowing-text {
+        animation: glow 2.718s linear infinite;
+        font-weight: bold;
+      }
+
       @keyframes glow {
         0% {
           color: red;
@@ -25,38 +101,40 @@
           text-shadow: 0 0 10px purple;
         }
       }
-      .glowing-text {
-        animation: glow 2.718s linear infinite;
-        font-weight: bold;
-      }
     </style>
   </head>
   <body>
     <h1>WebSocket Client</h1>
-    <button id="connectButton">Connect</button>
-    <button id="sendButton" disabled>Send Message</button>
-    <button id="disconnectButton" disabled>Disconnect</button>
+    <div id="controls">
+      <button id="connectButton">Connect</button>
+      <button id="sendButton" disabled>Send Message</button>
+      <button id="disconnectButton" disabled>Disconnect</button>
+    </div>
     <div id="messages"></div>
 
     <script>
       let socket;
       const messages = document.getElementById("messages");
 
-      function addMessage(content) {
+      function addMessage(content, isQA = false) {
         const messageElement = document.createElement("div");
+        messageElement.className = `message${isQA ? " qa" : ""}`;
         messageElement.innerHTML = `<p>${content}</p>`;
-        messages.insertBefore(messageElement, messages.firstChild);
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
       }
 
       function addQAMessage(question, answer) {
         const messageElement = document.createElement("div");
+        messageElement.className = "message qa";
         messageElement.innerHTML = `
           <p>
             ${question}
             <span class="glowing-text">${answer}</span>
           </p>
         `;
-        messages.insertBefore(messageElement, messages.firstChild);
+        messages.appendChild(messageElement);
+        messages.scrollTop = messages.scrollHeight;
       }
 
       document.getElementById("connectButton").addEventListener("click", () => {
